@@ -1,0 +1,14 @@
+{
+  "name": "quick-notes",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:server": "cd packages/server && bun run dev",
+    "dev:desktop": "cd packages/desktop && bun run dev",
+    "build:desktop": "cd packages/desktop && bun run build",
+    "typecheck": "tsc --noEmit -p packages/shared && tsc --noEmit -p packages/server && tsc --noEmit -p packages/desktop"
+  }
+}
