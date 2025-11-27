@@ -8,7 +8,8 @@
     "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "build": "vite build && tsc -p tsconfig.node.json",
     "start": "electron .",
-    "dist": "bun run build && electron-builder --win --publish never"
+    "dist": "bun run build && electron-builder --win --publish never",
+    "dist:installer": "bun run build && electron-builder --win nsis --publish never"
   },
   "dependencies": {
     "@quick-notes/shared": "workspace:*",
@@ -45,12 +46,22 @@
       }
     ],
     "win": {
-      "target": "portable",
+      "target": ["nsis", "portable"],
       "signAndEditExecutable": false
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Quick Notes",
+      "uninstallDisplayName": "Quick Notes",
+      "deleteAppDataOnUninstall": false,
+      "include": "installer.nsh"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-Portable.${ext}"
     }
   }
 }
