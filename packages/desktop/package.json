@@ -1,8 +1,13 @@
 {
   "name": "@quick-notes/desktop",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A fast, modern desktop note-taking application",
-  "author": "Quick Notes Team",
+  "author": "Priyanshu Chawda <hellopriyanshu4@gmail.com>",
+  "homepage": "https://priyanshuchawda.github.io/electron-notes/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/priyanshuchawda/electron-notes.git"
+  },
   "main": "dist/main/index.js",
   "scripts": {
     "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
@@ -34,15 +39,19 @@
     "wait-on": "^7.0.0"
   },
   "build": {
-    "appId": "com.quicknotes.app",
+    "appId": "com.priyanshuchawda.quicknotes",
     "productName": "Quick Notes",
+    "copyright": "Copyright © 2024 Priyanshu Chawda",
+    "asar": true,
+    "compression": "maximum",
     "directories": {
       "output": "release",
       "buildResources": "build"
     },
     "files": [
       "dist/**/*",
-      "build/icon.png"
+      "!node_modules/**/*",
+      "node_modules/sql.js/dist/sql-wasm.wasm"
     ],
     "extraResources": [
       {
@@ -52,9 +61,20 @@
     ],
     "publish": null,
     "win": {
-      "target": ["nsis", "portable"],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
       "icon": "build/icon.png",
-      "signAndEditExecutable": false
+      "publisherName": "Priyanshu Chawda",
+      "legalTrademarks": "Quick Notes by Priyanshu Chawda",
+      "requestedExecutionLevel": "asInvoker"
     },
     "nsis": {
       "oneClick": false,
@@ -65,10 +85,14 @@
       "shortcutName": "Quick Notes",
       "uninstallDisplayName": "Quick Notes",
       "deleteAppDataOnUninstall": false,
-      "include": "installer.nsh"
+      "include": "installer.nsh",
+      "installerIcon": "build/icon.png",
+      "uninstallerIcon": "build/icon.png",
+      "installerHeaderIcon": "build/icon.png"
     },
     "portable": {
       "artifactName": "${productName}-${version}-Portable.${ext}"
-    }
+    },
+    "removePackageScripts": true
   }
 }

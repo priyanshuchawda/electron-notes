@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/priyanshuchawda/electron-notes/releases"><img src="https://img.shields.io/badge/version-1.0.1-blue.svg" alt="Version"></a>
+  <a href="https://github.com/priyanshuchawda/electron-notes/releases"><img src="https://img.shields.io/badge/version-1.0.2-blue.svg" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
   <a href="https://github.com/priyanshuchawda/electron-notes/actions"><img src="https://github.com/priyanshuchawda/electron-notes/actions/workflows/deploy-pages.yaml/badge.svg" alt="Deploy"></a>
 </p>
@@ -27,8 +27,8 @@
 
 | Version | Description | Download |
 |---------|-------------|----------|
-| **Installer** | Recommended - includes uninstaller | [Quick Notes Setup 1.0.1.exe](https://github.com/priyanshuchawda/electron-notes/releases/download/v1.0.1/Quick.Notes.Setup.1.0.1.exe) |
-| **Portable** | No installation needed | [Quick Notes-1.0.1-Portable.exe](https://github.com/priyanshuchawda/electron-notes/releases/download/v1.0.1/Quick.Notes-1.0.1-Portable.exe) |
+| **Installer** | Recommended - includes uninstaller | [Quick Notes Setup 1.0.2.exe](https://github.com/priyanshuchawda/electron-notes/releases/download/v1.0.2/Quick.Notes.Setup.1.0.2.exe) |
+| **Portable** | No installation needed | [Quick Notes-1.0.2-Portable.exe](https://github.com/priyanshuchawda/electron-notes/releases/download/v1.0.2/Quick.Notes-1.0.2-Portable.exe) |
 
 ## ✨ Features
 
