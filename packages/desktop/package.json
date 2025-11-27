@@ -14,11 +14,13 @@
     "@quick-notes/shared": "workspace:*",
     "@tanstack/react-query": "^5.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sql.js": "^1.13.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "@types/sql.js": "^1.4.9",
     "@vitejs/plugin-react": "^4.0.0",
     "concurrently": "^8.0.0",
     "electron": "^28.0.0",
@@ -35,6 +37,12 @@
     },
     "files": [
       "dist/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "node_modules/sql.js/dist/sql-wasm.wasm",
+        "to": "sql-wasm.wasm"
+      }
     ],
     "win": {
       "target": "portable",
