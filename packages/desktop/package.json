@@ -1,12 +1,14 @@
 {
   "name": "@quick-notes/desktop",
   "version": "1.0.0",
+  "description": "A fast, modern desktop note-taking application",
+  "author": "Quick Notes Team",
   "main": "dist/main/index.js",
   "scripts": {
     "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "build": "vite build && tsc -p tsconfig.node.json",
     "start": "electron .",
-    "dist": "npm run build && electron-builder"
+    "dist": "bun run build && electron-builder --win --publish never"
   },
   "dependencies": {
     "@quick-notes/shared": "workspace:*",
@@ -35,7 +37,12 @@
       "dist/**/*"
     ],
     "win": {
-      "target": "nsis"
+      "target": "portable",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   }
 }
