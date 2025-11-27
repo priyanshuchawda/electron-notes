@@ -9,7 +9,8 @@
     "build": "vite build && tsc -p tsconfig.node.json",
     "start": "electron .",
     "dist": "bun run build && electron-builder --win --publish never",
-    "dist:installer": "bun run build && electron-builder --win nsis --publish never"
+    "dist:installer": "bun run build && electron-builder --win nsis --publish never",
+    "generate-icons": "node scripts/generate-icons.js"
   },
   "dependencies": {
     "@quick-notes/shared": "workspace:*",
@@ -26,6 +27,8 @@
     "concurrently": "^8.0.0",
     "electron": "^28.0.0",
     "electron-builder": "^24.0.0",
+    "electron-icon-builder": "^2.0.1",
+    "sharp": "^0.34.5",
     "typescript": "^5.0.0",
     "vite": "^5.0.0",
     "wait-on": "^7.0.0"
@@ -34,10 +37,12 @@
     "appId": "com.quicknotes.app",
     "productName": "Quick Notes",
     "directories": {
-      "output": "release"
+      "output": "release",
+      "buildResources": "build"
     },
     "files": [
-      "dist/**/*"
+      "dist/**/*",
+      "build/icon.png"
     ],
     "extraResources": [
       {
@@ -47,6 +52,7 @@
     ],
     "win": {
       "target": ["nsis", "portable"],
+      "icon": "build/icon.png",
       "signAndEditExecutable": false
     },
     "nsis": {

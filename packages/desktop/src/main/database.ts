@@ -8,6 +8,19 @@ let db: SqlJsDatabase;
 const dbDir = app.getPath('userData');
 const dbPath = join(dbDir, 'notes.db');
 
+// ============================================
+// PERFORMANCE OPTIMIZATIONS
+// ============================================
+
+// Debounced save to reduce disk I/O (battery friendly)
+let saveTimeout: NodeJS.Timeout | null = null;
+const SAVE_DEBOUNCE_MS = 1000; // Save at most once per second
+
+// In-memory cache for frequently accessed data
+const notesCache = new Map<string, Note>();
+const tagsCache: Tag[] = [];
+let tagsCacheValid = false;
+
 export async function initDatabase(): Promise<void> {
   const SQL = await initSqlJs();
   
@@ -24,7 +37,7 @@ export async function initDatabase(): Promise<void> {
     db = new SQL.Database();
   }
 
-  // Initialize schema
+  // Initialize schema with optimized indexes
   db.run(`
     CREATE TABLE IF NOT EXISTS notes (
       id TEXT PRIMARY KEY,
@@ -48,16 +61,59 @@ export async function initDatabase(): Promise<void> {
       FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
     );
 
+    -- Performance indexes
     CREATE INDEX IF NOT EXISTS idx_notes_updated_at ON notes(updated_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_notes_title ON notes(title);
+    CREATE INDEX IF NOT EXISTS idx_note_tags_note ON note_tags(note_id);
+    CREATE INDEX IF NOT EXISTS idx_note_tags_tag ON note_tags(tag_id);
   `);
+
+  // Enable WAL mode for better concurrent performance (if supported)
+  try {
+    db.run('PRAGMA journal_mode = WAL');
+  } catch {
+    // WAL not supported in sql.js, ignore
+  }
+  
+  // Optimize for speed
+  db.run('PRAGMA synchronous = NORMAL');
+  db.run('PRAGMA cache_size = 10000');
+  db.run('PRAGMA temp_store = MEMORY');
   
   saveDatabase();
 }
 
 function saveDatabase(): void {
+  // Debounced save to reduce disk writes (better for SSD longevity & battery)
+  if (saveTimeout) {
+    clearTimeout(saveTimeout);
+  }
+  saveTimeout = setTimeout(() => {
+    const data = db.export();
+    const buffer = Buffer.from(data);
+    writeFileSync(dbPath, buffer);
+    saveTimeout = null;
+  }, SAVE_DEBOUNCE_MS);
+}
+
+// Force immediate save (for critical operations)
+function saveDatabaseNow(): void {
+  if (saveTimeout) {
+    clearTimeout(saveTimeout);
+    saveTimeout = null;
+  }
   const data = db.export();
   const buffer = Buffer.from(data);
   writeFileSync(dbPath, buffer);
+}
+
+// Invalidate caches when data changes
+function invalidateCache(noteId?: string): void {
+  if (noteId) {
+    notesCache.delete(noteId);
+  } else {
+    notesCache.clear();
+  }
 }
 
 function generateId(): string {

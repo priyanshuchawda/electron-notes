@@ -9,6 +9,20 @@ export default defineConfig({
   build: {
     outDir: '../../dist/renderer',
     emptyOutDir: true,
+    // Production optimizations - use esbuild (faster than terser)
+    minify: 'esbuild',
+    rollupOptions: {
+      output: {
+        // Chunk splitting for better caching
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          query: ['@tanstack/react-query'],
+        },
+      },
+    },
+    // Reduce bundle size
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 1000,
   },
   resolve: {
     alias: {
@@ -18,5 +32,13 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: ['react', 'react-dom', '@tanstack/react-query'],
+  },
+  // Enable source maps in dev only
+  esbuild: {
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
   },
 });
